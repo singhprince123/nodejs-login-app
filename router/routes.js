@@ -12,7 +12,7 @@ router.post('/register', (req, res) => {
         console.log(err)
       }else {
         if(user){
-          res.send('User Already Exists.')
+          res.json({ message: 'User Already Exists'})
         }else{
           let user = new User(userData);
           user.save((err, registeredUser) => {
@@ -20,7 +20,7 @@ router.post('/register', (req, res) => {
               console.log(err)      
             } else {
               
-              res.status(201)
+              res.status(201).json({ message: 'Registration Successfull..'})
             }
           })
         }
@@ -37,14 +37,14 @@ router.post('/register', (req, res) => {
         console.log(err)    
       } else {
         if (!user) {
-          res.status(401).send('Invalid Email')
+          res.status(401).json({message: "Invalid Email"})
         } else 
         if ( user.password !== userData.password) {
-          res.status(401).send('Invalid Password')
+          res.status(401).json({message: "Password Incorrect"})
         } else {
           let payload = {subject: user._id}
           let token = jwt.sign(payload, 'secretKey')
-          res.status(200).send({token,  name :userData.name})
+          res.status(200).json({token,  name :userData.name})
         }
       }
     })
